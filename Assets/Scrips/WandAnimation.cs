@@ -32,6 +32,7 @@ public class WandAnimation : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 mAnimator.SetTrigger("Trshoot");
+               
                 if (lightningRenderer != null)
                 {
                     StartCoroutine(ActivateLightningWithDelay(startDelay)); // Delay start by 1 second
@@ -45,7 +46,7 @@ public class WandAnimation : MonoBehaviour
         if (lightningRenderer != null)
         {
             lightningRenderer.enabled = false;
-            mAnimator.ResetTrigger("Trshoot");
+            mAnimator.SetTrigger("Tridle");
         }
     }
 
@@ -53,12 +54,14 @@ public class WandAnimation : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         DeactivateLightning();
+        //mAnimator.ResetTrigger("Trshoot");
     }
 
     private IEnumerator ActivateLightningWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         lightningRenderer.enabled = true;
-        StartCoroutine(DeactivateLightningAfterDelay(activeTime)); 
+        StartCoroutine(DeactivateLightningAfterDelay(activeTime));
+        
     }
 }
