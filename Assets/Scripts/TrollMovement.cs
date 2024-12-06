@@ -9,16 +9,16 @@ public class TrollMovement : MonoBehaviour
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
 
-    //patroling
+    // Patroling
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
-    //attacking
+    // Attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
 
-    //states
+    // States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
@@ -30,30 +30,42 @@ public class TrollMovement : MonoBehaviour
 
     private void Update()
     {
+        // Detect if the player is within sight or attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInSightRange && playerInAttackRange) AttackPlayer();
+        // Call appropriate behavior based on player detection
+        if (playerInAttackRange)
+        {
+            AttackPlayer();
+        }
+        else if (playerInSightRange)
+        {
+            ChasePlayer();
+        }
+        else
+        {
+            Patroling();
+        }
     }
 
     private void Patroling()
     {
-        if (!walkPointSet) SearchWalkPoint();
+        if (!walkPointSet)
+        {
+            SearchWalkPoint();
+        }
 
         if (walkPointSet)
         {
             troll.SetDestination(walkPoint);
-            Debug.Log("Troll is moving to walk point: " + walkPoint);
-        }
 
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        if (distanceToWalkPoint.magnitude < 1f)
-        {
-            walkPointSet = false;
-            Debug.Log("Troll reached walk point.");
+            // Check if the troll has reached its patrol point
+            Vector3 distanceToWalkPoint = transform.position - walkPoint;
+            if (distanceToWalkPoint.magnitude < 1f)
+            {
+                walkPointSet = false; // Reset walk point
+            }
         }
     }
 
@@ -62,32 +74,36 @@ public class TrollMovement : MonoBehaviour
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        Vector3 potentialPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        NavMeshHit hit;
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
+        // Ensure patrol point is on the NavMesh
+        if (NavMesh.SamplePosition(potentialPoint, out hit, walkPointRange, NavMesh.AllAreas))
         {
+            walkPoint = hit.position;
             walkPointSet = true;
-            Debug.Log("New walk point set: " + walkPoint);
         }
     }
 
     private void ChasePlayer()
     {
-        troll.SetDestination(player.position);
-        Debug.Log("Troll is chasing the player.");
+        if (troll.isOnNavMesh && player != null)
+        {
+            troll.SetDestination(player.position); // Move toward the player
+        }
     }
 
     private void AttackPlayer()
     {
-        troll.SetDestination(transform.position);
+        troll.SetDestination(transform.position); // Stop moving
         transform.LookAt(player);
 
         if (!alreadyAttacked)
         {
-            ///Attack code here
             alreadyAttacked = true;
+
+            // Attack cooldown logic
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
-            Debug.Log("Troll is attacking the player.");
         }
     }
 

@@ -9,6 +9,11 @@ public class WandAnimation : MonoBehaviour
     [SerializeField] float startDelay = 1.0f;
     [SerializeField] float activeTime = 1f;
 
+    public float damage = 10f; // Amount of damage to deal
+    public float range = 100f; // Maximum range of the raycast
+    public Camera playerCamera; // Reference to the player's camera
+    public LayerMask hitLayer; // Layers the raycast should check (ignore non-enemy objects)
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +41,7 @@ public class WandAnimation : MonoBehaviour
                 if (lightningRenderer != null)
                 {
                     StartCoroutine(ActivateLightningWithDelay(startDelay)); // Delay start by 1 second
+                    FireRaycast();
                 }
             }
         }
@@ -63,5 +69,32 @@ public class WandAnimation : MonoBehaviour
         lightningRenderer.enabled = true;
         StartCoroutine(DeactivateLightningAfterDelay(activeTime));
         
+    }
+
+    void FireRaycast()
+    {
+        // Shoot a ray from the camera's forward direction
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        RaycastHit hit;
+
+        // Draw the ray in the scene view for debugging purposes
+        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 2.0f);
+
+        if (Physics.Raycast(ray, out hit, range, hitLayer))
+        {
+            // Check if the ray hits an object with the "Enemy" tag
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                // Log the hit for testing purposes
+                Debug.Log("Enemy hit!");
+
+                // Get the enemy's health component and apply damage
+                EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(damage); // Apply damage to the enemy
+                }
+            }
+        }
     }
 }
