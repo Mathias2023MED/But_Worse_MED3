@@ -5,6 +5,12 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public float health = 100f; // Enemy's health  
+    private Vector3 originalPosition;
+
+    void Start()
+    {
+        originalPosition = transform.position;
+    }
 
     public void TakeDamage(float damage)
     {
@@ -36,7 +42,13 @@ public class EnemyHealth : MonoBehaviour
         {
             animator.SetTrigger("death");
         }
-        Destroy(gameObject, 2f); // Delay the destruction to allow the death animation to play  
+        StartCoroutine(DestroyAfterDelay(4f));
+    }
+
+    IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
     }
 }
 

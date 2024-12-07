@@ -8,6 +8,7 @@ public class TrollMovement : MonoBehaviour
     public NavMeshAgent troll;
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
+    private Animator animator;
 
     // Patroling
     public Vector3 walkPoint;
@@ -25,7 +26,8 @@ public class TrollMovement : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        troll = GetComponent<NavMeshAgent>();
+        troll = GetComponent<NavMeshAgent>();       
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -59,6 +61,7 @@ public class TrollMovement : MonoBehaviour
         if (walkPointSet)
         {
             troll.SetDestination(walkPoint);
+            //animator.Play("walk"); // Play walk animation
 
             // Check if the troll has reached its patrol point
             Vector3 distanceToWalkPoint = transform.position - walkPoint;
@@ -93,6 +96,7 @@ public class TrollMovement : MonoBehaviour
         }
     }
 
+
     private void AttackPlayer()
     {
         troll.SetDestination(transform.position); // Stop moving
@@ -100,6 +104,7 @@ public class TrollMovement : MonoBehaviour
 
         if (!alreadyAttacked)
         {
+            animator.Play("attack1"); // Play attack animation
             alreadyAttacked = true;
 
             // Attack cooldown logic
