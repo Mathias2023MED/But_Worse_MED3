@@ -27,6 +27,8 @@ public class WandAnimation : MonoBehaviour
                 lightningRenderer.enabled = false;
             }
         }
+
+
     }
 
     // Update is called once per frame
@@ -41,7 +43,6 @@ public class WandAnimation : MonoBehaviour
                 if (lightningRenderer != null)
                 {
                     StartCoroutine(ActivateLightningWithDelay(startDelay)); // Delay start by 1 second
-                    FireRaycast();
                 }
             }
         }
@@ -68,7 +69,8 @@ public class WandAnimation : MonoBehaviour
         yield return new WaitForSeconds(delay);
         lightningRenderer.enabled = true;
         StartCoroutine(DeactivateLightningAfterDelay(activeTime));
-        
+        FireRaycast();
+
     }
 
     void FireRaycast()
@@ -83,7 +85,7 @@ public class WandAnimation : MonoBehaviour
         if (Physics.Raycast(ray, out hit, range, hitLayer))
         {
             // Check if the ray hits an object with the "Enemy" tag
-            if (hit.collider.CompareTag("Enemy"))
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
             {
                 // Log the hit for testing purposes
                 Debug.Log("Enemy hit!");
@@ -93,6 +95,10 @@ public class WandAnimation : MonoBehaviour
                 if (enemyHealth != null)
                 {
                     enemyHealth.TakeDamage(damage); // Apply damage to the enemy
+                }
+                else
+                {
+                    Debug.LogError("Enemy does not have an EnemyHealth component.");
                 }
             }
         }

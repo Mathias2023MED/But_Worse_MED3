@@ -5389,13 +5389,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037540196}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.04755197, y: 0.08288758, z: 0.003959619, w: 0.9954159}
+  m_LocalRotation: {x: 0.0130444355, y: 0.08297499, z: -0.001086201, w: 0.9964656}
   m_LocalPosition: {x: 0.20622839, y: -5.385, z: 0.9835105}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1970183592}
-  m_LocalEulerAnglesHint: {x: -5.47, y: 9.52, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.5, y: 9.52, z: 0}
 --- !u!1 &1149073980
 GameObject:
   m_ObjectHideFlags: 0
@@ -10858,12 +10858,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startDelay: 1
   activeTime: 1
-  damage: 10
-  range: 100
+  damage: 20
+  range: 400
   playerCamera: {fileID: 1998379043}
   hitLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!1001 &1977198799
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10916,22 +10916,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 178355641568136948, guid: 4a2995c2dfa5ee447bb99406df3fd57e, type: 3}
+      propertyPath: m_Size.z
+      value: 1.83
+      objectReference: {fileID: 0}
     - target: {fileID: 1080850092214694490, guid: 4a2995c2dfa5ee447bb99406df3fd57e, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 8009306808814115955}
-    - target: {fileID: 1080850092214694490, guid: 4a2995c2dfa5ee447bb99406df3fd57e, type: 3}
-      propertyPath: sightRange
-      value: 16.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080850092214694490, guid: 4a2995c2dfa5ee447bb99406df3fd57e, type: 3}
-      propertyPath: walkPointRange
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5605069364967328450, guid: 4a2995c2dfa5ee447bb99406df3fd57e, type: 3}
-      propertyPath: m_Speed
-      value: 2.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
